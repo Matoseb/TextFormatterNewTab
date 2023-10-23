@@ -2,8 +2,8 @@
 class TextFormatterNewTab extends Textformatter {
     public static function getModuleInfo() {
         return [
-            'title' => 'Textformatter New tag',
-            'version' => 2,
+            'title' => 'Textformatter New tab',
+            'version' => 3,
             'summary' => 'Automatically adds target="_blank" to external links.',
             'autoload' => true,
             'singular' => true,
