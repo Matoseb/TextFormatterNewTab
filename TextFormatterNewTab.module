@@ -1,5 +1,8 @@
 <?php
-class ExternalLinksOpenInNewTab extends Textformatter {
+
+use ProcessWire\Module;
+
+class ExternalLinksOpenInNewTab extends Textformatter implements Module {
     public static function getModuleInfo() {
         return [
             'title' => 'Textformatter New tag',
