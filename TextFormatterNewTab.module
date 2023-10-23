@@ -1,5 +1,5 @@
 <?php
-class ExternalLinksOpenInNewTab extends WireData implements Module {
+class ExternalLinksOpenInNewTab extends Textformatter {
     public static function getModuleInfo() {
         return [
             'title' => 'External Links Open in New Tab',
@@ -10,13 +10,8 @@ class ExternalLinksOpenInNewTab extends WireData implements Module {
         ];
     }
 
-    public function init() {
-        $this->addHookAfter('Textformatter::render', $this, 'addTargetBlank');
-    }
-
-    public function addTargetBlank(HookEvent $event) {
-        $text = $event->return;
-        $text = preg_replace_callback('/<a\s(.*?)href=["\'](https?:\/\/\S+?)["\'](.*?)>/', function ($matches) {
+    public function format(&$str) {
+        $str = preg_replace_callback('/<a\s(.*?)href=["\'](https?:\/\/\S+?)["\'](.*?)>/', function ($matches) {
             $attributes = $matches[1];
             $href = $matches[2];
             $rest = $matches[3];
@@ -27,8 +22,6 @@ class ExternalLinksOpenInNewTab extends WireData implements Module {
             }
 
             return "<a $attributes href=\"$href\"$rest>";
-        }, $text);
-
-        $event->return = $text;
+        }, $str);
     }
 }
