@@ -1,8 +1,5 @@
 <?php
-
-use ProcessWire\Module;
-
-class ExternalLinksOpenInNewTab extends Textformatter implements Module {
+class TextFormatterNewTab extends Textformatter {
     public static function getModuleInfo() {
         return [
             'title' => 'Textformatter New tag',
@@ -15,15 +12,23 @@ class ExternalLinksOpenInNewTab extends Textformatter implements Module {
     }
 
     public function format(&$str) {
+        $hosts = wire('config')->httpHosts;
         $str = preg_replace_callback('/<a\s(.*?)href=["\'](https?:\/\/\S+?)["\'](.*?)>/', function ($matches) {
             $attributes = $matches[1];
             $href = $matches[2];
             $rest = $matches[3];
 
-            // Check if the link is external
-            if (strpos($href, wire('config')->httpUrl) !== 0) {
+            // get domain name from href
+            $domain = parse_url($href, PHP_URL_HOST);
+            // compare domain name with allowed hosts
+            if (!in_array($domain, $hosts)) {
                 $attributes .= ' target="_blank"';
             }
+
+            // Check if the link is external
+            // if (strpos($href, wire('config')->httpUrl) !== 0) {
+            //     $attributes .= ' target="_blank"';
+            // }
 
             return "<a $attributes href=\"$href\"$rest>";
         }, $str);
