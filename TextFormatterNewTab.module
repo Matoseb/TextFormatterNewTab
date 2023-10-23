@@ -2,11 +2,12 @@
 class ExternalLinksOpenInNewTab extends Textformatter {
     public static function getModuleInfo() {
         return [
-            'title' => 'External Links Open in New Tab',
-            'version' => 1,
+            'title' => 'Textformatter New tag',
+            'version' => 2,
             'summary' => 'Automatically adds target="_blank" to external links.',
+            'autoload' => true,
             'singular' => true,
-            'autoload' => 'textformatter',
+            'href' => 'https://github.com/Matoseb/TextFormatterNewTab'
         ];
     }
 
