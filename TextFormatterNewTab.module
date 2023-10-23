@@ -1,0 +1,34 @@
+<?php
+class ExternalLinksOpenInNewTab extends WireData implements Module {
+    public static function getModuleInfo() {
+        return [
+            'title' => 'External Links Open in New Tab',
+            'version' => 1,
+            'summary' => 'Automatically adds target="_blank" to external links.',
+            'singular' => true,
+            'autoload' => 'textformatter',
+        ];
+    }
+
+    public function init() {
+        $this->addHookAfter('Textformatter::render', $this, 'addTargetBlank');
+    }
+
+    public function addTargetBlank(HookEvent $event) {
+        $text = $event->return;
+        $text = preg_replace_callback('/<a\s(.*?)href=["\'](https?:\/\/\S+?)["\'](.*?)>/', function ($matches) {
+            $attributes = $matches[1];
+            $href = $matches[2];
+            $rest = $matches[3];
+
+            // Check if the link is external
+            if (strpos($href, wire('config')->httpUrl) !== 0) {
+                $attributes .= ' target="_blank"';
+            }
+
+            return "<a $attributes href=\"$href\"$rest>";
+        }, $text);
+
+        $event->return = $text;
+    }
+}
